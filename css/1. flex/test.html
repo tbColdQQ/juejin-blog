@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .item {
+      height: 100px;
+      
+    }
+    .red {
+      background: red;
+      width: 100px;
+      flex-grow: 2;
+    }
+    .blue {
+      background: blue;
+      flex-grow: 1;
+    }
+    .yellow {
+      background: yellow;
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="div">
+    <div class="item red"></div>
+    <div class="item blue"></div>
+    <div class="item yellow"></div>
+  </div>
+</body>
+</html>
