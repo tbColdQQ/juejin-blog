@@ -7,6 +7,8 @@
   <title>Document</title>
   <style>
     .div {
+      width: 200px;
+      margin-top: 200px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -14,20 +16,24 @@
     }
     .item {
       height: 100px;
-      
     }
     .red {
       background: red;
       width: 100px;
-      flex-grow: 2;
+      flex-shrink: 3;
+      /* flex-grow: 2; */
     }
     .blue {
       background: blue;
-      flex-grow: 1;
+      /* flex-grow: 1; */
+      flex-shrink: 1;
+      width: 100px;
     }
     .yellow {
       background: yellow;
-      flex-grow: 1;
+      /* flex-grow: 1; */
+      flex-shrink: 1;
+      width: 100px;
     }
   </style>
 </head>

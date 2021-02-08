@@ -24,5 +24,12 @@
   .yellow { background: yellow; flex-grow: 1; }
   ```
 
+  ![](E:\X_学习\blogs\css\1. flex\images\1.png)
   
+  总宽度为1259，红色div宽度为679.5，蓝色和黄色的div宽度为289.75
 
+### flex-shrink
+
+定义子项目的缩放比例，默认是 `0`，即存在剩余空间也不会缩小
+
+- 不管 `flex-shrink` 的值是否为 `0` ，如果没有给元素给定宽度，则元素的宽度为 `0`
