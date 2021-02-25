@@ -24,7 +24,7 @@
   .yellow { background: yellow; flex-grow: 1; }
   ```
 
-  ![](E:\X_学习\blogs\css\1. flex\images\1.png)
+  ![](.\images\1.png)
   
   总宽度为1259，红色div宽度为679.5，蓝色和黄色的div宽度为289.75
 
