@@ -77,3 +77,24 @@ function useReducer (reducer, initialState) {
 }
 ```
 
+
+
+### 4、`fiber`
+
+1. `fiber` 出现之前存在的问题
+   1. `virtualDom` 在递归调用时会一直占用主线程，不能中断操作
+   2. `JavaScript` 是单线程的，不能同时执行多个任务
+   3. `JavaScript` 的执行与UI渲染时互斥的
+   4. 导致卡顿
+2. `fiber` 如何解决
+   1. `fiber` 放弃递归
+   2. 利用浏览器空闲时间执行比对任务
+3. 什么是 `fiber`
+   1. `fiber` 是一个执行单元
+   2. 每一个 `jsx` 中节点的构建是一个执行单元
+   3. 是 `JavaScript` 对象，单向链表，`child`、`return`、`sibling`
+4. `fiber` 工作方式
+   1. `render` 阶段：构建 `fiber` 对象，生成链表结构，可中断
+      - 构建 `root` 的 `fiber` 节点
+      - 使用 `requestIdleCallback` 利用空闲时间构建 `fiber` 节点
+   2. `commit` 阶段：构建 `dom`，不可中断
