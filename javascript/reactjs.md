@@ -64,7 +64,7 @@ function useEffect (callback, depsAry) {
 
 
 
-3、`useReducer` 的实现原理
+### 3、`useReducer` 的实现原理
 
 ```javascript
 function useReducer (reducer, initialState) {
@@ -98,3 +98,19 @@ function useReducer (reducer, initialState) {
       - 构建 `root` 的 `fiber` 节点
       - 使用 `requestIdleCallback` 利用空闲时间构建 `fiber` 节点
    2. `commit` 阶段：构建 `dom`，不可中断
+
+
+
+### 5、生命周期
+
+> 引用：[React 生命周期](https://juejin.cn/post/6844903842430074893)
+
+- `fiber` 之前
+
+  ![img](D:\资料\juejin-blog\javascript\images\reactjs-1.jpg)
+
+
+
+- `fiber` 之后
+
+  ![img](D:\资料\juejin-blog\javascript\images\reactjs-2.jpg)
