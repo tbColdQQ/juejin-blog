@@ -114,3 +114,115 @@ function useReducer (reducer, initialState) {
 - `fiber` 之后
 
   ![img](D:\资料\juejin-blog\javascript\images\reactjs-2.jpg)
+
+
+
+### 6、`TinyUseState`
+
+```javascript
+
+let isMount = true
+let workInProgressHook = null
+
+const fiber = {
+  stateNode: App,
+  memoizedState: null // 单向链表存储每一个 useXXX 的 hook
+}
+
+function useState (initialState) {
+  let hook
+  if (isMount) {
+    hook = {
+      memoizedState: initialState,
+      next: null,
+      // 存储 setXXX 时的队列，pending是待执行的循环链表
+      queue: {
+        pending: null
+      }
+    }
+    if (!fiber.memoizedState) {
+      fiber.memoizedState = hook
+    } else {
+      workInProgressHook.next = hook
+      // console.log('第二次调用hooks-1--->', JSON.stringify(workInProgressHook))
+    }
+    workInProgressHook = hook
+    // console.log('第二次调用hooks-2--->', JSON.stringify(workInProgressHook))
+  } else {
+    hook = workInProgressHook
+    workInProgressHook = workInProgressHook.next
+  }
+
+  let baseState = hook.memoizedState
+
+  if (hook.queue.pending) {
+    let firstUpdate = hook.queue.pending.next
+
+    do {
+      const action = firstUpdate.action
+      baseState = action(baseState)
+      firstUpdate = firstUpdate.next
+    } while (firstUpdate !== hook.queue.pending)
+
+    hook.queue.pending = null
+  }
+  hook.memoizedState = baseState
+  // console.log('第二次调用hooks--->', JSON.stringify(workInProgressHook))
+  return [baseState, dispatchAction.bind(null, hook.queue)]
+}
+
+function dispatchAction (queue, action) {
+  // 环状链表，链表中的每一个 action 可能执行的优先级不同
+  // 因为优先级不同，可能会跳过一些节点执行优先级高的节点
+  // 环状链表可以完成被跳过节点的执行
+  // 而单向链表需要找到第一个节点再继续执行
+  const update = {
+    action,
+    next: null
+  }
+
+  // 生成环状链表
+  if (queue.pending === null) {
+    // u0 -> u0
+    update.next = update
+  } else {
+    // u1 -> u0 -> u1
+    // queue.pending 为环状链表的最后一个节点
+    // queue.pending.next 即为环状链表的第一个节点
+    update.next = queue.pending.next
+    queue.pending.next = update
+  }
+
+  queue.pending = update
+
+  schedule()
+}
+
+function schedule () {
+  // 渲染完成后将 workInProgressHook 设置回链表的第一个位置
+  workInProgressHook = fiber.memoizedState
+  const app = fiber.stateNode()
+  isMount = false
+  return app
+}
+
+
+function App () {
+  const [num, updateNum] = useState(1)
+  const [num1, updateNum1] = useState(10)
+
+  console.log('isMount?', isMount)
+  console.log('num:', num)
+  console.log('num1:', num1)
+  return {
+    onClick () {
+      updateNum(num => num + 1)
+      updateNum1(num => num + 10)
+    }
+  }
+}
+
+window.app = schedule()
+
+```
+
