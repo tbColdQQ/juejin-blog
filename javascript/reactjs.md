@@ -144,10 +144,11 @@ function useState (initialState) {
       fiber.memoizedState = hook
     } else {
       workInProgressHook.next = hook
-      // console.log('第二次调用hooks-1--->', JSON.stringify(workInProgressHook))
     }
+    // 146行，workInProgressHook 可以视为上一次的 hook
+    // 将上一次的 hook 的 next 指向当前的 hook
+    // 并将当前的 hook 的引用赋给 workInProgressHook
     workInProgressHook = hook
-    // console.log('第二次调用hooks-2--->', JSON.stringify(workInProgressHook))
   } else {
     hook = workInProgressHook
     workInProgressHook = workInProgressHook.next
@@ -189,6 +190,10 @@ function dispatchAction (queue, action) {
     // u1 -> u0 -> u1
     // queue.pending 为环状链表的最后一个节点
     // queue.pending.next 即为环状链表的第一个节点
+
+    // u0 -> u1 -> u2 -> u0, 添加 u3 后，环状为 u0 -> u1 -> u2 -> u3 -> u0
+    // 其中 u3: update, u2: queue.pending, u0: queue.pending.next
+    // u3.next = u0, u2.next = u3
     update.next = queue.pending.next
     queue.pending.next = update
   }
