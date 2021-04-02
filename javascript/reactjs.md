@@ -168,7 +168,6 @@ function useState (initialState) {
     hook.queue.pending = null
   }
   hook.memoizedState = baseState
-  // console.log('第二次调用hooks--->', JSON.stringify(workInProgressHook))
   return [baseState, dispatchAction.bind(null, hook.queue)]
 }
 
