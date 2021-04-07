@@ -1,13 +1,15 @@
 ### 1、`new` 关键字的实现
 
 ```javascript
-function newImpl (Cl) {
-  var obj = {}
-  var args = Array.prototype.slice.call(arguments, 1)
-  obj.__proto__.contructor = Cl
-  obj.__proto__ = Cl.prototype
-  Cl.apply(obj, args)
-  return obj
+function newImpl (fn, ...args) {
+  if (typeof fn !== 'function') {
+    throw 'fn must be a function'
+  }
+  var obj = new Object()
+  obj.__proto__ = Object.create(fn.prototype)
+  var res = fn._apply(obj, [...args])
+
+  return (typeof res === 'object' && res !== null) || typeof res === 'function' ? res : obj
 }
 ```
 
@@ -75,3 +77,39 @@ function throttle (fn, time) {
 }
 ```
 
+### 6、 `call` 和 `apply`
+
+```javascript
+Function.prototype._call = function (context, ...args) {
+  var context = context || window
+  context.fn = this
+  var res = eval('context.fn(...args)')
+  delete context.fn
+  return res
+}
+Function.prototype._apply = function (context, args) {
+  var context = context || window
+  context.fn = this
+  var res = context.fn(...args)
+  delete context.fn
+  return res
+}
+```
+
+### 7、 `bind`
+
+```javascript
+Function.prototype._bind = function (context, ...args) {
+  if (typeof this !== 'function') {
+    throw 'this must be a function'
+  }
+  var self = this
+  var res = function () {
+    self.apply(this instanceof self ? this : context, [...args])
+  }
+  if (this.prototype) {
+    res.prototype = this.prototype
+  }
+  return res
+}
+```
