@@ -113,3 +113,18 @@ Function.prototype._bind = function (context, ...args) {
   return res
 }
 ```
+
+### 8、 `Object.create`
+
+```javascript
+Object._create = function(obj, properties) {
+  if (properties === null) throw new Error('properties must be null')
+  if (typeof obj === 'undefined') throw new Error('proto is undefined')
+  function F () {}
+  F.prototype = obj
+  var res = new F()
+  if (properties !== undefined) Object.defineProperties(res, propertiesObject)
+  if (obj === null) res.__proto__ = obj
+  return res
+}
+```
